@@ -1,0 +1,20 @@
+# Developer tools' files
+.lite_workspace.lua
+.github
+.vscode
+.tmp
+database.sqlite
+IIT2.png
+backend build/node_modules
+frontend build/backend build
+
+# Neutralinojs binaries and builds
+/bin
+/dist
+
+# Neutralinojs client (minified)
+neutralino.js
+
+# Neutralinojs related files
+.storage
+*.log

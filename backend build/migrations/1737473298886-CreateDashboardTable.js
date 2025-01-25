@@ -1,0 +1,108 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CreateDashboardTable1737473298886 = void 0;
+class CreateDashboardTable1737473298886 {
+    constructor() {
+        this.name = 'CreateDashboardTable1737473298886';
+    }
+    async up(queryRunner) {
+        await queryRunner.query(`CREATE TABLE "classroom" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL)`);
+        await queryRunner.query(`CREATE TABLE "invitee" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstname" varchar NOT NULL, "lastname" varchar NOT NULL, "email" varchar NOT NULL)`);
+        await queryRunner.query(`CREATE TABLE "jury" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstname" varchar NOT NULL, "lastname" varchar NOT NULL, "email" varchar NOT NULL)`);
+        await queryRunner.query(`CREATE TABLE "defence" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "date" datetime NOT NULL, "hour" varchar NOT NULL, "projectName" varchar NOT NULL, "department_id" integer, "classroomId" integer)`);
+        await queryRunner.query(`CREATE TABLE "department" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar NOT NULL)`);
+        await queryRunner.query(`CREATE TABLE "student" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstname" varchar NOT NULL, "lastname" varchar NOT NULL, "address" varchar NOT NULL, "department_id" integer, "defence_id" integer)`);
+        await queryRunner.query(`CREATE TABLE "invitee_defences_defence" ("inviteeId" integer NOT NULL, "defenceId" integer NOT NULL, PRIMARY KEY ("inviteeId", "defenceId"))`);
+        await queryRunner.query(`CREATE INDEX "IDX_3108a5c59bd2dbdbffb02cb3ac" ON "invitee_defences_defence" ("inviteeId") `);
+        await queryRunner.query(`CREATE INDEX "IDX_c1b31082b379aef074ed66988a" ON "invitee_defences_defence" ("defenceId") `);
+        await queryRunner.query(`CREATE TABLE "defence_invitees_invitee" ("defenceId" integer NOT NULL, "inviteeId" integer NOT NULL, PRIMARY KEY ("defenceId", "inviteeId"))`);
+        await queryRunner.query(`CREATE INDEX "IDX_44b2354508a7a949067513d832" ON "defence_invitees_invitee" ("defenceId") `);
+        await queryRunner.query(`CREATE INDEX "IDX_3f452f9425000c49f9b12257ea" ON "defence_invitees_invitee" ("inviteeId") `);
+        await queryRunner.query(`CREATE TABLE "defence_juries_jury" ("defenceId" integer NOT NULL, "juryId" integer NOT NULL, PRIMARY KEY ("defenceId", "juryId"))`);
+        await queryRunner.query(`CREATE INDEX "IDX_72dd9affb4b2e46e4785fedcf5" ON "defence_juries_jury" ("defenceId") `);
+        await queryRunner.query(`CREATE INDEX "IDX_892332bf123ab3495f4b3c3c4b" ON "defence_juries_jury" ("juryId") `);
+        await queryRunner.query(`CREATE TABLE "temporary_defence" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "date" datetime NOT NULL, "hour" varchar NOT NULL, "projectName" varchar NOT NULL, "department_id" integer, "classroomId" integer, CONSTRAINT "FK_8c8899d074ef501ce2b7adccd21" FOREIGN KEY ("department_id") REFERENCES "department" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION, CONSTRAINT "FK_160473ed0d044cad6b7a32089a1" FOREIGN KEY ("classroomId") REFERENCES "classroom" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION)`);
+        await queryRunner.query(`INSERT INTO "temporary_defence"("id", "date", "hour", "projectName", "department_id", "classroomId") SELECT "id", "date", "hour", "projectName", "department_id", "classroomId" FROM "defence"`);
+        await queryRunner.query(`DROP TABLE "defence"`);
+        await queryRunner.query(`ALTER TABLE "temporary_defence" RENAME TO "defence"`);
+        await queryRunner.query(`CREATE TABLE "temporary_student" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstname" varchar NOT NULL, "lastname" varchar NOT NULL, "address" varchar NOT NULL, "department_id" integer, "defence_id" integer, CONSTRAINT "FK_e881625ee5b2d84c865a5f2387e" FOREIGN KEY ("department_id") REFERENCES "department" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION, CONSTRAINT "FK_028f1b3eaecc507e9a9083a0ae1" FOREIGN KEY ("defence_id") REFERENCES "defence" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION)`);
+        await queryRunner.query(`INSERT INTO "temporary_student"("id", "firstname", "lastname", "address", "department_id", "defence_id") SELECT "id", "firstname", "lastname", "address", "department_id", "defence_id" FROM "student"`);
+        await queryRunner.query(`DROP TABLE "student"`);
+        await queryRunner.query(`ALTER TABLE "temporary_student" RENAME TO "student"`);
+        await queryRunner.query(`DROP INDEX "IDX_3108a5c59bd2dbdbffb02cb3ac"`);
+        await queryRunner.query(`DROP INDEX "IDX_c1b31082b379aef074ed66988a"`);
+        await queryRunner.query(`CREATE TABLE "temporary_invitee_defences_defence" ("inviteeId" integer NOT NULL, "defenceId" integer NOT NULL, CONSTRAINT "FK_3108a5c59bd2dbdbffb02cb3ac4" FOREIGN KEY ("inviteeId") REFERENCES "invitee" ("id") ON DELETE CASCADE ON UPDATE CASCADE, CONSTRAINT "FK_c1b31082b379aef074ed66988a7" FOREIGN KEY ("defenceId") REFERENCES "defence" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION, PRIMARY KEY ("inviteeId", "defenceId"))`);
+        await queryRunner.query(`INSERT INTO "temporary_invitee_defences_defence"("inviteeId", "defenceId") SELECT "inviteeId", "defenceId" FROM "invitee_defences_defence"`);
+        await queryRunner.query(`DROP TABLE "invitee_defences_defence"`);
+        await queryRunner.query(`ALTER TABLE "temporary_invitee_defences_defence" RENAME TO "invitee_defences_defence"`);
+        await queryRunner.query(`CREATE INDEX "IDX_3108a5c59bd2dbdbffb02cb3ac" ON "invitee_defences_defence" ("inviteeId") `);
+        await queryRunner.query(`CREATE INDEX "IDX_c1b31082b379aef074ed66988a" ON "invitee_defences_defence" ("defenceId") `);
+        await queryRunner.query(`DROP INDEX "IDX_44b2354508a7a949067513d832"`);
+        await queryRunner.query(`DROP INDEX "IDX_3f452f9425000c49f9b12257ea"`);
+        await queryRunner.query(`CREATE TABLE "temporary_defence_invitees_invitee" ("defenceId" integer NOT NULL, "inviteeId" integer NOT NULL, CONSTRAINT "FK_44b2354508a7a949067513d8323" FOREIGN KEY ("defenceId") REFERENCES "defence" ("id") ON DELETE CASCADE ON UPDATE CASCADE, CONSTRAINT "FK_3f452f9425000c49f9b12257ea7" FOREIGN KEY ("inviteeId") REFERENCES "invitee" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION, PRIMARY KEY ("defenceId", "inviteeId"))`);
+        await queryRunner.query(`INSERT INTO "temporary_defence_invitees_invitee"("defenceId", "inviteeId") SELECT "defenceId", "inviteeId" FROM "defence_invitees_invitee"`);
+        await queryRunner.query(`DROP TABLE "defence_invitees_invitee"`);
+        await queryRunner.query(`ALTER TABLE "temporary_defence_invitees_invitee" RENAME TO "defence_invitees_invitee"`);
+        await queryRunner.query(`CREATE INDEX "IDX_44b2354508a7a949067513d832" ON "defence_invitees_invitee" ("defenceId") `);
+        await queryRunner.query(`CREATE INDEX "IDX_3f452f9425000c49f9b12257ea" ON "defence_invitees_invitee" ("inviteeId") `);
+        await queryRunner.query(`DROP INDEX "IDX_72dd9affb4b2e46e4785fedcf5"`);
+        await queryRunner.query(`DROP INDEX "IDX_892332bf123ab3495f4b3c3c4b"`);
+        await queryRunner.query(`CREATE TABLE "temporary_defence_juries_jury" ("defenceId" integer NOT NULL, "juryId" integer NOT NULL, CONSTRAINT "FK_72dd9affb4b2e46e4785fedcf58" FOREIGN KEY ("defenceId") REFERENCES "defence" ("id") ON DELETE CASCADE ON UPDATE CASCADE, CONSTRAINT "FK_892332bf123ab3495f4b3c3c4bb" FOREIGN KEY ("juryId") REFERENCES "jury" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION, PRIMARY KEY ("defenceId", "juryId"))`);
+        await queryRunner.query(`INSERT INTO "temporary_defence_juries_jury"("defenceId", "juryId") SELECT "defenceId", "juryId" FROM "defence_juries_jury"`);
+        await queryRunner.query(`DROP TABLE "defence_juries_jury"`);
+        await queryRunner.query(`ALTER TABLE "temporary_defence_juries_jury" RENAME TO "defence_juries_jury"`);
+        await queryRunner.query(`CREATE INDEX "IDX_72dd9affb4b2e46e4785fedcf5" ON "defence_juries_jury" ("defenceId") `);
+        await queryRunner.query(`CREATE INDEX "IDX_892332bf123ab3495f4b3c3c4b" ON "defence_juries_jury" ("juryId") `);
+    }
+    async down(queryRunner) {
+        await queryRunner.query(`DROP INDEX "IDX_892332bf123ab3495f4b3c3c4b"`);
+        await queryRunner.query(`DROP INDEX "IDX_72dd9affb4b2e46e4785fedcf5"`);
+        await queryRunner.query(`ALTER TABLE "defence_juries_jury" RENAME TO "temporary_defence_juries_jury"`);
+        await queryRunner.query(`CREATE TABLE "defence_juries_jury" ("defenceId" integer NOT NULL, "juryId" integer NOT NULL, PRIMARY KEY ("defenceId", "juryId"))`);
+        await queryRunner.query(`INSERT INTO "defence_juries_jury"("defenceId", "juryId") SELECT "defenceId", "juryId" FROM "temporary_defence_juries_jury"`);
+        await queryRunner.query(`DROP TABLE "temporary_defence_juries_jury"`);
+        await queryRunner.query(`CREATE INDEX "IDX_892332bf123ab3495f4b3c3c4b" ON "defence_juries_jury" ("juryId") `);
+        await queryRunner.query(`CREATE INDEX "IDX_72dd9affb4b2e46e4785fedcf5" ON "defence_juries_jury" ("defenceId") `);
+        await queryRunner.query(`DROP INDEX "IDX_3f452f9425000c49f9b12257ea"`);
+        await queryRunner.query(`DROP INDEX "IDX_44b2354508a7a949067513d832"`);
+        await queryRunner.query(`ALTER TABLE "defence_invitees_invitee" RENAME TO "temporary_defence_invitees_invitee"`);
+        await queryRunner.query(`CREATE TABLE "defence_invitees_invitee" ("defenceId" integer NOT NULL, "inviteeId" integer NOT NULL, PRIMARY KEY ("defenceId", "inviteeId"))`);
+        await queryRunner.query(`INSERT INTO "defence_invitees_invitee"("defenceId", "inviteeId") SELECT "defenceId", "inviteeId" FROM "temporary_defence_invitees_invitee"`);
+        await queryRunner.query(`DROP TABLE "temporary_defence_invitees_invitee"`);
+        await queryRunner.query(`CREATE INDEX "IDX_3f452f9425000c49f9b12257ea" ON "defence_invitees_invitee" ("inviteeId") `);
+        await queryRunner.query(`CREATE INDEX "IDX_44b2354508a7a949067513d832" ON "defence_invitees_invitee" ("defenceId") `);
+        await queryRunner.query(`DROP INDEX "IDX_c1b31082b379aef074ed66988a"`);
+        await queryRunner.query(`DROP INDEX "IDX_3108a5c59bd2dbdbffb02cb3ac"`);
+        await queryRunner.query(`ALTER TABLE "invitee_defences_defence" RENAME TO "temporary_invitee_defences_defence"`);
+        await queryRunner.query(`CREATE TABLE "invitee_defences_defence" ("inviteeId" integer NOT NULL, "defenceId" integer NOT NULL, PRIMARY KEY ("inviteeId", "defenceId"))`);
+        await queryRunner.query(`INSERT INTO "invitee_defences_defence"("inviteeId", "defenceId") SELECT "inviteeId", "defenceId" FROM "temporary_invitee_defences_defence"`);
+        await queryRunner.query(`DROP TABLE "temporary_invitee_defences_defence"`);
+        await queryRunner.query(`CREATE INDEX "IDX_c1b31082b379aef074ed66988a" ON "invitee_defences_defence" ("defenceId") `);
+        await queryRunner.query(`CREATE INDEX "IDX_3108a5c59bd2dbdbffb02cb3ac" ON "invitee_defences_defence" ("inviteeId") `);
+        await queryRunner.query(`ALTER TABLE "student" RENAME TO "temporary_student"`);
+        await queryRunner.query(`CREATE TABLE "student" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "firstname" varchar NOT NULL, "lastname" varchar NOT NULL, "address" varchar NOT NULL, "department_id" integer, "defence_id" integer)`);
+        await queryRunner.query(`INSERT INTO "student"("id", "firstname", "lastname", "address", "department_id", "defence_id") SELECT "id", "firstname", "lastname", "address", "department_id", "defence_id" FROM "temporary_student"`);
+        await queryRunner.query(`DROP TABLE "temporary_student"`);
+        await queryRunner.query(`ALTER TABLE "defence" RENAME TO "temporary_defence"`);
+        await queryRunner.query(`CREATE TABLE "defence" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "date" datetime NOT NULL, "hour" varchar NOT NULL, "projectName" varchar NOT NULL, "department_id" integer, "classroomId" integer)`);
+        await queryRunner.query(`INSERT INTO "defence"("id", "date", "hour", "projectName", "department_id", "classroomId") SELECT "id", "date", "hour", "projectName", "department_id", "classroomId" FROM "temporary_defence"`);
+        await queryRunner.query(`DROP TABLE "temporary_defence"`);
+        await queryRunner.query(`DROP INDEX "IDX_892332bf123ab3495f4b3c3c4b"`);
+        await queryRunner.query(`DROP INDEX "IDX_72dd9affb4b2e46e4785fedcf5"`);
+        await queryRunner.query(`DROP TABLE "defence_juries_jury"`);
+        await queryRunner.query(`DROP INDEX "IDX_3f452f9425000c49f9b12257ea"`);
+        await queryRunner.query(`DROP INDEX "IDX_44b2354508a7a949067513d832"`);
+        await queryRunner.query(`DROP TABLE "defence_invitees_invitee"`);
+        await queryRunner.query(`DROP INDEX "IDX_c1b31082b379aef074ed66988a"`);
+        await queryRunner.query(`DROP INDEX "IDX_3108a5c59bd2dbdbffb02cb3ac"`);
+        await queryRunner.query(`DROP TABLE "invitee_defences_defence"`);
+        await queryRunner.query(`DROP TABLE "student"`);
+        await queryRunner.query(`DROP TABLE "department"`);
+        await queryRunner.query(`DROP TABLE "defence"`);
+        await queryRunner.query(`DROP TABLE "jury"`);
+        await queryRunner.query(`DROP TABLE "invitee"`);
+        await queryRunner.query(`DROP TABLE "classroom"`);
+    }
+}
+exports.CreateDashboardTable1737473298886 = CreateDashboardTable1737473298886;
+//# sourceMappingURL=1737473298886-CreateDashboardTable.js.map

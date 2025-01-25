@@ -1,0 +1,60 @@
+{
+  "$schema": "https://raw.githubusercontent.com/neutralinojs/neutralinojs/main/schemas/neutralino.config.schema.json",
+  "applicationId": "js.neutralino.sample",
+  "version": "1.0.0",
+  "defaultMode": "window",
+  "port": 0,
+  "documentRoot": "/frontend build/",
+  "url": "/",
+  "enableServer": true,
+  "enableNativeAPI": true,
+  "tokenSecurity": "one-time",
+  "logging": {
+    "enabled": true,
+    "writeToLogFile": true
+  },
+  "nativeAllowList": [
+    "app.*",
+    "os.*",
+    "filesystem.*",
+    "debug.log"
+  ],
+  "globalVariables": {
+    "TEST1": "Hello",
+    "TEST2": [
+      2,
+      4,
+      5
+    ],
+    "TEST3": {
+      "value1": 10,
+      "value2": {}
+    }
+  },
+  "modes": {
+    "window": {
+      "title": "Gestion Soutenances",
+      "width": 1920,
+      "height": 1080,
+      "minWidth": 800,
+      "minHeight": 500,
+      "center": true,
+      "fullScreen": false,
+      "alwaysOnTop": false,
+      "icon": "/IIT2.png",
+      "enableInspector": false,
+      "borderless": false,
+      "maximize": true,
+      "hidden": false,
+      "resizable": true,
+      "exitProcessOnClose": true
+    }
+  },
+  "cli": {
+    "binaryName": "Gestion Soutenances",
+    "resourcesPath": "/frontend build/",
+    "extensionsPath": "/extensions/",
+    "binaryVersion": "5.5.0",
+    "clientVersion": "5.5.0"
+  }
+}
