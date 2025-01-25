@@ -28,6 +28,12 @@ A desktop application for managing thesis defense sessions and scheduling.
 2. Navigate to "backend build" directory and install dependencies
 3. Run the executable file
 
+- For Dev: 
+1. Clonne the repository 
+2. Install Neutralino JS with "npm install -g @neutralinojs/neu"
+3. Navigate to "backend build" directory and install dependencies
+4. Navigate to project directory and run "neu run"
+
 ## Usage
 
 1. Login with admin credentials (email: admin, password: admin123)
