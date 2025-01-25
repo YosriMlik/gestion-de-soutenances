@@ -24,12 +24,9 @@ A desktop application for managing thesis defense sessions and scheduling.
 
 ## Installation
 
-1. Clone the repository
-2. Open the project in terminal and type :
-    - git install lfs
-    - git lfs pull
-3. Navigate to "backend build" directory and install dependencies
-4. Run the executable file
+1. Download latest release (Gestion Soutenances Desktop.zip) from releases page
+2. Navigate to "backend build" directory and install dependencies
+3. Run the executable file
 
 ## Usage
 
