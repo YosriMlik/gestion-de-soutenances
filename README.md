@@ -1,15 +1,44 @@
-# neutralinojs-minimal
 
-The default template for a Neutralinojs app. It's possible to use your favorite frontend framework by using [these steps](https://neutralino.js.org/docs/getting-started/using-frontend-libraries).
+# Gestion Soutenances Desktop App
 
-## Contributors
+A desktop application for managing thesis defense sessions and scheduling.
 
-[![Contributors](https://contrib.rocks/image?repo=neutralinojs/neutralinojs-minimal)](https://github.com/neutralinojs/neutralinojs-minimal/graphs/contributors)
+## Features
 
-## License
+- Student management
+- Professor/Jury management
+- Defense session scheduling
+- Room allocation
+- Calendar integration
+- Department management
+- Email notifications
 
-[MIT](LICENSE)
+## Technologies Used
 
-## Icon credits
+- React + Neutralino for desktop interface
+- SQLite database
+- Nest JS for backend
 
-- `trayIcon.png` - Made by [Freepik](https://www.freepik.com) and downloaded from [Flaticon](https://www.flaticon.com)
+## Prerequisites
+- Node JS 18 or higher
+
+## Installation
+
+1. Clone the repository
+2. Open the project in terminal and type :
+    - git install lfs
+    - git lfs pull
+3. Navigate to "backend build" directory and install dependencies
+4. Run the executable file
+
+## Usage
+
+1. Login with admin credentials (email: admin, password: admin123)
+2. Add/manage students and professors
+3. Schedule defense sessions
+4. Generate reports and notifications
+5. Track defense status
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss proposed changes.
