@@ -25,7 +25,7 @@ A desktop application for managing thesis defense sessions and scheduling.
 ## Installation
 
 1. Download latest release (Gestion Soutenances Desktop.zip) from releases page
-2. Right click on the executable file (Gestion Soutenances) and create a shortcut, place it whenever you want (email: admin, password: admin123)
+2. Right click on the executable file (Gestion Soutenances.exe) and create a shortcut, place it whenever you want (email: admin, password: admin123)
 3. Enjoy !
 
 - For Dev: 
